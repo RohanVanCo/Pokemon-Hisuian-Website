@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokémon Battle</title>
+  <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: aquamarine;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+      }
+      .vid {
+            opacity: 0.5;
+            position: fixed;
+            display: block;
+            z-index: -1;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            background-color: white;
+        }
+    .logo {
+            width: auto;
+            height: 60px;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            right: 0;
+            margin: 0;
+            background-image: linear-gradient(5deg,#c0beb9 5%, #f0f0f0 30%);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+        }
+
+        .logonav {
+            padding-left: 20px;
+        }
+
+        .menu {
+            display: none;
+            width: 30px;
+            height: 30px;
+            padding-right: 20px;
+            cursor: pointer;
+        }
+
+        nav .logo:hover {
+            transition: .2s;
+            transform: scale(1.2, 1.2);
+        }
+
+        nav a {
+            font-size: 20px;
+            text-decoration: none;
+            color: #015BA6;
+        }
+        
+        nav .links a:hover{
+            transition: .2s;
+            transform: scale(1.1);
+            color: white;
+            background-color: #015BA6;
+            border-radius: 10px;
+            padding: 5px;
+        }
+        nav .links a.active {
+            color: white;
+            padding: 5px;
+            background-color: #015BA6;
+            border-radius: 10px;
+        }
+
+        nav a.active:hover {
+            color: white;
+            transition: .2s;
+            transform: scale(1.1);
+            padding: 5px;
+            background-color: aquamarine;
+            border-radius: 10px;
+        }
+
+        nav .links {
+            width: 50%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+    #selection-container {
+      display: block;
+    }
+
+    #battle-container, #result-container {
+      display: none;
+    }
+
+    .pokemon-option {
+      display: inline-block;
+      margin: 20px;
+      cursor: pointer;
+      border: solid 5px white;
+      background-image: linear-gradient(45deg, #015BA6, aquamarine);
+      border-radius: 20px;
+      color: white;
+    }
+
+    .pokemon-option img {
+      width: 150px;
+      padding: 5px;
+      background-image: radial-gradient(70% 20% at 80px 135px,rgba(9, 14, 36, 0.644), rgb(60, 95, 172), transparent 70%);
+    }
+
+    .pokemon-option:hover {
+      border-color: #015BA6;
+      transition: .2s;
+      transform: scale(1.1);
+    }
+    h1{
+      color: #015BA6;
+      padding-top: 80px;
+    }
+    h2{
+      color: #015BA6;
+    }
+    .battle {
+      background-image: linear-gradient(45deg,#c0beb9 40%, #f0f0f0 70%);
+      margin-left: 25%;
+      margin-right: 25%;
+      color:#015BA6;
+      display: flex;
+      flex-direction: column;
+      height: 400px;
+      padding: 20px;
+      justify-content: space-between;
+      position: relative;
+      border: solid 5px white;
+      border-radius: 20px;
+    }
+
+    .opponent-container, .player-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: absolute;
+    }
+
+    .opponent-container {
+      top: 10px;
+      right: 30px; /* Position the opponent in the top-right */
+    }
+
+    .player-container {
+      bottom: 120px;
+      left: 30px; /* Position the player in the bottom-left */
+    }
+
+    .opponent-container img, .player-container img {
+      width: 100px;
+      background-image: radial-gradient(70% 20% at 50px 85px,rgba(9, 14, 36, 0.644), rgb(60, 95, 172), transparent 70%);
+    }
+
+    .health-bar-container {
+      width: 150px;
+      height: 10px;
+      border-radius: 10px;
+      background-color: #ccc;
+      border: 2px solid #000;
+      margin: 10px auto;
+    }
+
+    .health-bar {
+      height: 100%;
+      background-color: #4caf50;
+      width: 100%;
+      transition: 0.5s;
+    }
+
+    .attack-bar {
+      background-color: #015BA6;
+      width: 100%;
+      margin: 0;
+      margin-top: 20px; /* Add space above the attack bar */
+      position: absolute;
+      bottom: 0;
+      left:0;
+      border-radius: 0 0 15px 15px;
+    }
+
+    .attack-bar button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      color:white;
+      background-color: #015BA6;
+      border: 2px solid white;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    .attack-bar button:hover {
+      background-color: aquamarine;
+      transition: .2s;
+      transform: scale(1.1);
+    }
+
+    .log {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #f8f8f8;
+      border: 2px solid #ccc;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    /* Overlay to cover the screen but keep battle visible */
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5); /* Black with transparency */
+      display: none; /* Hidden by default */
+      z-index: 9999; /* Ensure it's on top of other content */
+    }
+
+    /* Result container centered within overlay */
+    #result-container{
+      background-image: linear-gradient(45deg, #015BA6, aquamarine);
+      border: 5px solid white;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      width: 300px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10000; /* Ensure it appears above the overlay */
+    }
+    #result-container button{
+      border: 2px solid white;
+      padding: 10px;
+      background-color: #015BA6;
+      color: white;
+      border-radius: 10px;
+    }
+    #result-container button:hover{
+      transition: .2s;
+      transform: scale(1.1);
+      background-color: aquamarine;
+    }
+
+    /* Keyframes for image transition */
+    @keyframes moveInFromLeft {
+      0% {
+        transform: translateX(-400px); /* Start off-screen to the left */
+      }
+      100% {
+        transform: translateX(0); /* Move to the normal position */
+      }
+    }
+
+    @keyframes moveInFromRight {
+      0% {
+        transform: translateX(400px); /* Start off-screen to the right */
+      }
+      100% {
+        transform: translateX(0); /* Move to the normal position */
+      }
+    }
+
+    /* Position the divs so they can animate */
+    #battle-container {
+      position: relative;
+    }
+
+    /* Apply the animations when the battle starts */
+    #battle-container .player-container {
+      animation: moveInFromLeft 3s forwards;
+      opacity: 1;
+    }
+
+    #battle-container .opponent-container {
+      animation: moveInFromRight 3s forwards;
+      opacity: 1;
+    }
+    @media screen and (max-width: 1000px) {
+            .pokemon-option img {
+              width: 150px;
+              padding: 5px;
+              background-image: radial-gradient(70% 20% at 55px 95px,rgba(9, 14, 36, 0.644), rgb(60, 95, 172), transparent 70%);
+            }
+    
+            .battle {
+              margin-left: 15%;
+              margin-right: 15%;
+            }
+            .attack-bar{
+              flex-wrap: nowrap; 
+              display: flex;
+            }
+            .attack-bar button{
+              font-size: 80%;
+              
+            }
+            .opponent-container img, .player-container img {
+              width: 80px;
+              background-image: radial-gradient(70% 30% at 40px 65px,rgba(9, 14, 36, 0.644), rgb(60, 95, 172), transparent 70%);
+            }
+            .health-bar-container {
+              width: 120px;
+              height: 10px;
+            }
+    }
+    @media screen and (max-width: 600px) {
+            nav {
+                display: inline-block;
+                align-items: flex-start;
+            }
+
+            .menu {
+                display: inline-flex;
+                
+            }
+            .menu:hover{
+                transition: .2s;
+                transform: scale(1.5);
+            }
+            nav .logonav {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+          
+            nav .links {
+                width: 100%;
+                flex-direction: column;
+                align-items: center;
+                position: absolute;
+                top: 85px;
+                left: 0;
+                right: 0;
+                background-image: linear-gradient(5deg,#c0beb9 5%, #f0f0f0 30%);
+                display: none; 
+                flex-direction: column;
+                text-align: center;
+            }
+            nav .links a{
+                display: block;
+                width: 100%;
+                text-align: center;
+                padding: 10px;
+                font-size: 18px;
+            }
+
+            nav .links a.active{
+                background-color: #015BA6;
+                width: 100%;
+                color: white;
+                border-radius: 0px;
+                padding: 10px;
+            }
+            nav .links a.active:hover{
+                background-color: aquamarine;
+                width: 100%;
+                color: white;
+                border-radius: 0;
+                transition: .2s;
+                transform: scale(1.1);
+                padding: 10px;
+            }
+            nav .links a:hover{
+                background-color: #015BA6;
+                width: 100%;
+                color: white;
+                border-radius: 0;
+                transition: .2s;
+                transform: scale(1.1);
+                padding: 10px;
+                
+            }
+            body{
+              font-size: 80%;
+            }
+            .attack-bar{
+              flex-wrap: nowrap; 
+              display: flex;
+            }
+            .attack-bar button{
+              font-size: 70%;
+              
+            }
+            .opponent-container img, .player-container img {
+              width: 50px;
+              background-image: radial-gradient(70% 20% at 25px 40px,rgba(9, 14, 36, 0.644), rgb(60, 95, 172), transparent 70%);
+            }
+            .health-bar-container {
+              width: 100px;
+              height: 8px;
+              margin: 10px auto;
+            }
+            .battle {
+              height: 300px;
+              margin-left: 10%;
+              margin-right: 10%;
+            }
+            .opponent-container {
+              top: 10px;
+              right: 10px; /* Position the opponent in the top-right */
+            }
+
+            .player-container {
+              bottom: 120px;
+              left: 10px; /* Position the player in the bottom-left */
+            }
+            .pokemon-option img {
+              width: 100px;
+            }
+        }
+
+  </style>
+</head>
+<body>
+  <div>
+  <video class="vid" autoplay loop muted>
+      <source src="Pokeball_BG.mp4">
+  </video>
+  
+</div>
+    <nav class="navbar">
+      <div class="logonav">
+          <a class="logopokemon" href="index.html"><img src="Logo.png" class="logo" alt="logo"></a>
+          <label class="menu" id="menu-btn"><img src="menu.png" alt="menu"></label>
+      </div>
+      <div class="links" id="nav-links">
+          <a class="link" href="index.html" >Home</a>
+          <a class="link" href="pokedex.html">Pokedex</a>
+          <a class="link" href="maps.html">Maps</a>
+          <a class="link" href="about.html">About</a>
+          <a class="active" href="games.html">Games</a>
+      </div>
+  </nav>
+  <h1>Pokémon Battle</h1>
+
+  <!-- Pokémon Selection -->
+  <div id="selection-container">
+    <h2>Choose Your Pokémon:</h2>
+    <div class="pokemon-option" data-name="Typhlosion">
+      <img src="Typhlosion-Hisui.png" alt="Typhlosion">
+      <p>Hisuian Typhlosion</p>
+    </div>
+    <div class="pokemon-option" data-name="Samurott">
+      <img src="Samurott-Hisui.png" alt="Samurott">
+      <p>Hisuian Samurott</p>
+    </div>
+    <div class="pokemon-option" data-name="Decidueye">
+      <img src="Decidueye-Hisui.png" alt="Decidueye">
+      <p>Hisuian Decidueye</p>
+    </div>
+  </div>
+
+  <!-- Battle -->
+  <div id="battle-container">
+    <h2>Battle!</h2>
+    <div class="battle">
+      <div class="opponent-container">
+        <div class="health-bar-container">
+          <div class="health-bar" id="opponent-health"></div>
+        </div>
+        <p>Opponent Pokémon</p>
+        <img id="opponent-image" src="" alt="Opponent Pokémon">
+      </div>
+
+      <div class="player-container">
+        <div class="health-bar-container">
+          <div class="health-bar" id="player-health"></div>
+        </div>
+        <p>Your Pokémon</p>
+        <img id="player-image" src="" alt="Player Pokémon">   
+      </div>
+    
+      <div class="attack-bar" id="actions">
+        <div>
+          <button id="move-1"></button>
+          <button id="move-2"></button>  
+        </div>
+        <div>
+          <button id="move-3"></button>
+          <button id="move-4"></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="log" id="battle-log">
+      <p>Battle Log:</p>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div id="overlay">
+    <div id="result-container">
+      <h2 id="result-message"></h2>
+      <button id="restart-battle">Restart Battle</button>
+      <button id="choose-another">Choose Another Pokémon</button>
+    </div>
+  </div>
+
+  <script>
+    const menuButton = document.getElementById('menu-btn');
+        const navLinks = document.getElementById('nav-links');
+
+        document.getElementById('menu-btn').addEventListener('click', function() {
+            const navLinks = document.getElementById('nav-links');
+            if (window.innerWidth <= 600) {
+                if (navLinks.style.display === "none" || navLinks.style.display === "") {
+                    navLinks.style.display = "flex"; // Show links on small screen
+                } else {
+                    navLinks.style.display = "none"; // Hide links on small screen
+                }
+            }
+        });
+
+        document.addEventListener('click', function(event) {
+            if (window.innerWidth <= 600 && !navLinks.contains(event.target) && !menuButton.contains(event.target)) {
+                navLinks.style.display = "none";
+            }
+        });
+
+        // Reset menu state when window is resized above 600px
+        window.addEventListener('resize', function() {
+            const navLinks = document.getElementById('nav-links');
+            if (window.innerWidth > 600) {
+                navLinks.style.display = "flex"; // Always show the links on large screens
+            } else {
+                navLinks.style.display = "none"; // Hide the links on small screens
+            }
+        });
+        const selectionContainer = document.getElementById('selection-container');
+    const battleContainer = document.getElementById('battle-container');
+    const resultContainer = document.getElementById('result-container');
+    const playerImage = document.getElementById('player-image');
+    const opponentImage = document.getElementById('opponent-image');
+    const playerHealthBar = document.getElementById('player-health');
+    const opponentHealthBar = document.getElementById('opponent-health');
+    const resultMessage = document.getElementById('result-message');
+    const moveButtons = [
+      document.getElementById('move-1'),
+      document.getElementById('move-2'),
+      document.getElementById('move-3'),
+      document.getElementById('move-4'),
+    ];
+    const battleLog = document.getElementById('battle-log');
+
+    let selectedPokemon = null;
+    let opponent = null;
+    let playerHealth, opponentHealth, playerMaxHealth, opponentMaxHealth;
+    let playerAttackStat, opponentAttackStat, playerDefenseStat, opponentDefenseStat;
+    let playerMoves, opponentMoves;
+    let canAttack = true;
+
+    const pokemonOptions = {
+      Typhlosion: {
+        image: "Typhlosion-Hisui.png",
+        types: ["fire", "ghost"],
+        baseStats: { health: 220, attack: 90, defense: 60 },
+        moves: {
+          "Flamethrower": { damage: 30, type: "fire" },
+          "Shadow Ball": { damage: 20, type: "ghost" },
+          "Infernal Parade": { damage: 25, type: "ghost" },
+          "Focus Blast": { damage: 30, type: "fighting" },
+        },
+      },
+      Samurott: {
+        image: "Samurott-Hisui.png",
+        types: ["water", "dark"],
+        baseStats: { health: 240, attack: 100, defense: 70 },
+        moves: {
+          "Ceaseless Edge": { damage: 20, type: "dark" },
+          "Aqua Cutter": { damage: 25, type: "water" },
+          "Air Slash": { damage: 30, type: "flying" },
+          "Aqua Jet": { damage: 20, type: "water" },
+        },
+      },
+      Decidueye: {
+        image: "Decidueye-Hisui.png",
+        types: ["grass", "ghost"],
+        baseStats: { health: 230, attack: 95, defense: 65 },
+        moves: {
+          "Knock Off": { damage: 25, type: "dark" },
+          "Triple Arrows": { damage: 25, type: "fighting" },
+          "Brave Bird": { damage: 30, type: "flying" },
+          "Trailblaze": { damage: 20, type: "grass" },
+        },
+      },
+    };
+
+    // Type Effectiveness Chart
+    const typeEffectiveness = {
+      fire: { grass: 2, water: 0.5, fire: 1.0 },
+      water: { fire: 2, grass: 0.5, water: 1.0 },
+      grass: { water: 2, fire: 0.5, grass: 1.0 },
+      flying: { grass: 2, fighting: 2},
+      fighting: { dark: 2, flying: 0.5, ghost: 0.0 },
+      dark: { ghost: 2, fighting: 0.5,},
+      ghost: { ghost: 2, dark: 0.5}
+    };
+
+    // Function to calculate type effectiveness
+    function getEffectiveness(moveType, targetTypes) {
+      return targetTypes.reduce(
+        (multiplier, targetType) => multiplier * (typeEffectiveness[moveType]?.[targetType] || 1.0),
+        1.0
+      );
+    }
+
+    // Function to calculate damage
+      function calculateDamage(attackerAttack, defenderDefense, baseDamage, moveType, targetTypes) {
+    // Get the type effectiveness
+    const typeMultiplier = getEffectiveness(moveType, targetTypes);
+    
+    // Generate a random number between 85 and 100 (inclusive)
+    const random = Math.floor(Math.random() * (100 - 85 + 1)) + 85;
+
+    // Apply the damage formula
+    const damage = ((40 * baseDamage) * (attackerAttack / defenderDefense)) / 50;
+    const finalDamage = damage * typeMultiplier * (random / 100);
+
+    return Math.max(2, Math.floor(finalDamage)); // Ensure at least 1 damage
+  }
+
+    // Handle Pokémon selection
+    document.querySelectorAll(".pokemon-option").forEach((option) => {
+      option.addEventListener("click", () => {
+        const chosenPokemon = option.getAttribute("data-name");
+        const selectedPokemon = pokemonOptions[chosenPokemon];
+        const opponentNames = Object.keys(pokemonOptions);
+        const opponentPokemon = opponentNames[Math.floor(Math.random() * opponentNames.length)];
+        const opponent = pokemonOptions[opponentPokemon];
+
+        playerTypes = selectedPokemon.types;
+        opponentTypes = opponent.types;
+
+        // Initialize player and opponent stats
+        playerTypes = selectedPokemon.types;
+        opponentTypes = opponent.types;
+        playerMaxHealth = playerHealth = selectedPokemon.baseStats.health;
+        opponentMaxHealth = opponentHealth = opponent.baseStats.health;
+        playerAttackStat = selectedPokemon.baseStats.attack;
+        opponentAttackStat = opponent.baseStats.attack;
+        playerDefenseStat = selectedPokemon.baseStats.defense;
+        opponentDefenseStat = opponent.baseStats.defense;
+
+        playerMoves = selectedPokemon.moves;
+        opponentMoves = opponent.moves;
+
+        // Update images and health bars
+        playerImage.src = selectedPokemon.image;
+        opponentImage.src = opponent.image;
+        playerHealthBar.style.width = "100%";
+        opponentHealthBar.style.width = "100%";
+
+        // Update move buttons
+        const moveNames = Object.keys(playerMoves);
+      moveButtons.forEach((button, index) => {
+        if (moveNames[index]) {
+          const move = playerMoves[moveNames[index]];
+          button.textContent = moveNames[index];
+          button.onclick = () => playerAttack(moveNames[index]);
+
+          // Set button background color based on move type
+          const moveType = move.type;
+          button.style.backgroundColor = typeColors[moveType] || "#015BA6"; // Default to blue if type not found
+
+          button.style.display = "inline-block";
+        } else {
+          button.style.display = "none";
+        }
+      });
+
+        // Show battle container
+        selectionContainer.style.display = "none";
+        battleContainer.style.display = "block";
+      });
+    });
+    const typeColors = {
+      fire: "#C52203",   
+      water: "#3392FA",  
+      grass: "#8DCB5D",  
+      flying: "#98ABF2", 
+      dark: "#392C21",   
+      ghost: "#46467C", 
+      fighting: "#5D2215", 
+    };
+
+    // Player attack logic
+    function playerAttack(move) {
+      if (!canAttack) return;
+      canAttack = false;
+
+      const moveData = playerMoves[move];
+      const damage = calculateDamage(
+        playerAttackStat,
+        opponentDefenseStat,
+        moveData.damage,
+        moveData.type,
+        opponentTypes
+      );
+
+      opponentHealth -= damage;
+      opponentHealth = Math.max(opponentHealth, 0);
+      opponentHealthBar.style.width = (opponentHealth / opponentMaxHealth) * 100 + "%";
+
+      logBattle(`You used ${move}! It's a ${moveData.type}-type move.`);
+      logBattle(`You dealt ${damage} damage. Opponent's remaining health: ${opponentHealth}.`);
+
+      if (opponentHealth === 0) return endGame("You won!");
+
+      setTimeout(opponentTurn, 1000);
+    }
+
+    // Opponent turn logic
+    function opponentTurn() {
+      const moveNames = Object.keys(opponentMoves);
+      const randomMove = moveNames[Math.floor(Math.random() * moveNames.length)];
+      const moveData = opponentMoves[randomMove];
+
+      const damage = calculateDamage(
+        opponentAttackStat,
+        playerDefenseStat,
+        moveData.damage,
+        moveData.type,
+        playerTypes
+      );
+
+      playerHealth -= damage;
+      playerHealth = Math.max(playerHealth, 0);
+      playerHealthBar.style.width = (playerHealth / playerMaxHealth) * 100 + "%";
+
+      logBattle(`Opponent used ${randomMove}! It's a ${moveData.type}-type move.`);
+      logBattle(`Opponent dealt ${damage} damage. Your remaining health: ${playerHealth}.`);
+
+      if (playerHealth === 0) return endGame("You lost!");
+
+      setTimeout(() => {
+        canAttack = true;
+      }, 1000);
+    }
+
+// Log battle events
+function logBattle(message) {
+  const logEntry = document.createElement("p");
+  logEntry.textContent = message;
+  battleLog.appendChild(logEntry);
+  battleLog.scrollTop = battleLog.scrollHeight;
+}
+
+// End the game
+function endGame(message) {
+      resultMessage.textContent = message;
+      document.getElementById('overlay').style.display = 'block';
+      resultContainer.style.display = 'block';
+      canAttack = false; // Prevent further attacks
+
+    } 
+
+
+// Restart battle
+document.getElementById('restart-battle').addEventListener('click', () => {
+  playerHealth = 230;
+  opponentHealth = 230;
+
+  // Reset health bars
+  playerHealthBar.style.width = '100%';
+  opponentHealthBar.style.width = '100%';
+
+
+  document.getElementById('overlay').style.display = 'none';
+  resultContainer.style.display = 'none';
+  battleLog.innerHTML = '';
+  canAttack = true;
+});
+
+// Choose another Pokémon
+document.getElementById('choose-another').addEventListener('click', () => {
+  selectionContainer.style.display = 'block';
+  battleContainer.style.display = 'none';
+  document.getElementById('overlay').style.display = 'none';
+  resultContainer.style.display = 'none';
+  battleLog.innerHTML = '';
+
+  playerHealth = 100;
+  opponentHealth = 100;
+  playerHealthBar.style.width = '100%';
+  opponentHealthBar.style.width = '100%';
+  canAttack = true;
+});
+
+  </script>
+</body>
+</html>

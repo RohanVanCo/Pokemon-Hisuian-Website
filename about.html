@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        .vid {
+            opacity: 0.6;
+            position: fixed;
+            display: block;
+            z-index: -1;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .logo {
+            width: auto;
+            height: 60px;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            right: 0;
+            margin: 0;
+            background-image: linear-gradient(5deg,#c0beb9 5%, #f0f0f0 30%);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+        }
+
+        .logonav {
+            padding-left: 20px;
+        }
+
+        .menu {
+            display: none;
+            width: 30px;
+            height: 30px;
+            padding-right: 20px;
+            cursor: pointer;
+        }
+
+        nav .logo:hover {
+            transition: .2s;
+            transform: scale(1.2, 1.2);
+        }
+
+        nav a {
+            font-size: 20px;
+            text-decoration: none;
+            color: #015BA6;
+        }
+        
+        nav .links a:hover{
+            transition: .2s;
+            transform: scale(1.1);
+            color: white;
+            background-color: #015BA6;
+            border-radius: 10px;
+            padding: 5px;
+        }
+        nav .links a.active {
+            color: white;
+            padding: 5px;
+            background-color: #015BA6;
+            border-radius: 10px;
+        }
+
+        nav a.active:hover {
+            color: white;
+            transition: .2s;
+            transform: scale(1.1);
+            padding: 5px;
+            background-color: aquamarine;
+            border-radius: 10px;
+        }
+
+        nav .links {
+            width: 50%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        a{
+            text-decoration: none;
+            color: white;
+        }
+        .content {
+            display: inline-block;
+            padding-top: 100px;
+            color: #015ba6;
+            z-index: 1;
+            font-size: 18px;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            overflow-wrap: break-word;
+            text-align: center;
+            padding-bottom: 20px;
+        }
+
+        .content p{
+            display: inline-block;
+            text-align: justify;
+            margin-left:10%;
+            margin-right: 10%;
+        }
+        .content2{
+            background-color:  rgb(1, 91, 166,0.5);
+            text-align: center;
+            color: white;
+            padding: 30px;
+            margin:10%;
+            box-shadow: 0 0 20px 20px rgb(1, 91, 166, 0.5);
+        }
+        .content2 img{
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+        }
+        .members_box{
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .members{
+            padding: 20px;
+            width: 150px;
+            height: 190px;
+            margin:10px;
+            border:solid 5px white;
+            border-radius: 20px;
+            background-image: linear-gradient(45deg, #015BA6, aquamarine);
+        }
+        .members:hover{
+            transition: .2s;
+            transform: scale(1.1);
+        }
+        /* Media query for screens <= 600px */
+        @media screen and (max-width: 600px) {
+            nav {
+                display: inline-block;
+                align-items: flex-start;
+            }
+
+            .menu {
+                display: inline-flex;
+                
+            }
+            .menu:hover{
+                transition: .2s;
+                transform: scale(1.5);
+            }
+            nav .logonav {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+          
+            nav .links {
+                width: 100%;
+                flex-direction: column;
+                align-items: center;
+                position: absolute;
+                top: 85px;
+                left: 0;
+                right: 0;
+                background-image: linear-gradient(5deg,#c0beb9 5%, #f0f0f0 30%);
+                display: none; 
+                flex-direction: column;
+                text-align: center;
+            }
+            nav .links a{
+                display: block;
+                width: 100%;
+                text-align: center;
+                padding: 10px;
+                font-size: 18px;
+            }
+
+            nav .links a.active{
+                background-color: #015BA6;
+                width: 100%;
+                color: white;
+                border-radius: 0px;
+                padding: 10px;
+            }
+            nav .links a.active:hover{
+                background-color: aquamarine;
+                width: 100%;
+                color: white;
+                border-radius: 0;
+                transition: .2s;
+                transform: scale(1.1);
+                padding: 10px;
+            }
+            nav .links a:hover{
+                background-color: #015BA6;
+                width: 100%;
+                color: white;
+                border-radius: 0;
+                transition: .2s;
+                transform: scale(1.1);
+                padding: 10px;
+            }
+            .content{
+                font-size: 90%;
+            }
+
+            .content2{
+                font-size: 90%;
+                padding: 10px;
+                margin:10%;
+            }
+            .content2 img{
+                width: 70px;
+                height: 70px;
+                border-radius: 50%;
+            }
+            .members{
+                height: 140px;
+                width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <video class="vid" autoplay loop muted>
+            <source src="Night_Sky.mp4">
+        </video>
+    </div>
+
+    <nav class="navbar">
+        <div class="logonav">
+            <a class="logopokemon" href="index.html"><img src="Logo.png" class="logo" alt="logo"></a>
+            <label class="menu" id="menu-btn"><img src="menu.png" alt="menu"></label>
+        </div>
+        <div class="links" id="nav-links">
+            <a class="link" href="index.html" >Home</a>
+            <a class="link" href="pokedex.html">Pokedex</a>
+            <a class="link" href="maps.html">Maps</a>
+            <a class="active" href="about.html">About</a>
+            <a class="link" href="games.html">Games</a>
+        </div>
+    </nav>
+
+    <div class="content">
+        <h1>About Page</h1>
+        <h3>About the Pokemon Hisuian Website</h3>
+        <p>Our Hisuian website is a promising interactive website featuring Pokemon in the Hisuian region, showcasing the distinct map, the finest graphics of Hisuian Pokemon appearances, and the comprehensive details of their abilities.</p>
+        <p>The word Hisuian is derived from Japanese words for jade, or hidden and profound, manifesting the region's primitive and arcane nature. The main goal of this site is to guide aspiring trainers and even curious folks to become informed or interested in the enigmatic world of Hisuian Pokemon.</p>
+        <p>Established in November/December 2024, the Pokemon Hisuian Website is the amalgamation of hard work and creativity of our group to produce an enthralling guide highlighting Hisuian Pokemon.</p>
+    </div>
+    <div class="content2">
+        <h3>Meet our team:</h3>
+        <div class="members_box">
+            <a href="https://web.facebook.com/rohanvan.co/">
+                <div class="members">
+                <img src="rohan.png">
+                <p class="text">Leader: </p>
+                <p class="name">Co, Rohan Van</p>
+                </div>
+            </a>
+
+            <a href="https://web.facebook.com/profile.php?id=100085120710414">
+               <div class="members" href="">
+                <img src="alejandra.jpg">
+                <p class="text">Member: </p>
+                <p class="name">Borromeo, Alejandra</p>
+            </div> 
+            </a>
+
+            <a href="https://web.facebook.com/jl.calcs">
+                <div class="members">
+                <img src="john lloyd.jpg">
+                <p class="text">Member: </p>
+                <p class="name">Calcaña, John Lloyd</p>
+            </div>
+            </a>
+
+            <a href="https://web.facebook.com/profile.php?id=100007778177083">
+                <div class="members">
+                <img src="jasper.jpg">
+                <p class="text">Member: </p>
+                <p class="name">Catimbang, Jasper James</p>
+            </div>
+            </a>
+
+            <a href="https://web.facebook.com/profile.php?id=100072749047447">
+                <div class="members">
+                <img src="benjamin.jpg">
+                <p class="text">Member: </p>
+                <p class="name">Cisneros, Benjamin</p>
+                </div>
+            </a>
+            
+            <a href="https://web.facebook.com/profile.php?id=100009346201140">
+                <div class="members">
+                <img src="samuel.jpg">
+                <p class="text">Member: </p>
+                <p class="name">Cuenca, Samuel Jules</p>
+            </div>
+            </a>
+            
+            <a href="https://web.facebook.com/jeo.dadios">
+                <div class="members">
+                <img src="jheonnel.jpg">
+                <p class="text">Member: </p>
+                <p class="name">Dadios, Jheonnel</p>
+                </div>  
+            </a>
+            
+        </div>   
+    </div>
+
+    <script>
+        const menuButton = document.getElementById('menu-btn');
+        const navLinks = document.getElementById('nav-links');
+
+        document.getElementById('menu-btn').addEventListener('click', function() {
+            const navLinks = document.getElementById('nav-links');
+            if (window.innerWidth <= 600) {
+                if (navLinks.style.display === "none" || navLinks.style.display === "") {
+                    navLinks.style.display = "flex"; // Show links on small screen
+                } else {
+                    navLinks.style.display = "none"; // Hide links on small screen
+                }
+            }
+        });
+
+        document.addEventListener('click', function(event) {
+            if (window.innerWidth <= 600 && !navLinks.contains(event.target) && !menuButton.contains(event.target)) {
+                navLinks.style.display = "none";
+            }
+        });
+
+        // Reset menu state when window is resized above 600px
+        window.addEventListener('resize', function() {
+            const navLinks = document.getElementById('nav-links');
+            if (window.innerWidth > 600) {
+                navLinks.style.display = "flex"; // Always show the links on large screens
+            } else {
+                navLinks.style.display = "none"; // Hide the links on small screens
+            }
+        });
+        
+    </script>
+</body>
+</html>

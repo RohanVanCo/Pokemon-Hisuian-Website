@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+ .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+.popup h2 {
+    margin-top: 0;
+}
+
+.popup form {
+    margin-bottom: 20px;
+}
+
+.popup input {
+    display: block;
+    width: 80%;
+    padding: 10px;
+    margin: 10px auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.popup button {
+    padding: 10px 20px;
+    background-color: #015BA6;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 10px;
+    border: solid 2px white;
+}
+
+.btn:hover{
+    transition: .2s;
+    transform: scale(1.1);
+    background-color: aquamarine;
+}
+
+
+        .vid {
+            opacity: 0.5;
+            position: fixed;
+            display: block;
+            z-index: -1;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            background-color: white;
+        }
+
+        .logo {
+            width: auto;
+            height: 60px;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            right: 0;
+            margin: 0;
+            background-image: linear-gradient(5deg,#c0beb9 5%, #f0f0f0 30%);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+        }
+
+        .logonav {
+            padding-left: 20px;
+        }
+
+        .menu {
+            display: none;
+            width: 30px;
+            height: 30px;
+            padding-right: 20px;
+            cursor: pointer;
+        }
+
+        nav .logo:hover {
+            transition: .2s;
+            transform: scale(1.2, 1.2);
+        }
+
+        nav a {
+            font-size: 20px;
+            text-decoration: none;
+            color: #015BA6;
+        }
+        
+        nav .links a:hover{
+            transition: .2s;
+            transform: scale(1.1);
+            color: white;
+            background-color: #015BA6;
+            border-radius: 10px;
+            padding: 5px;
+        }
+        nav .links a.active {
+            color: white;
+            padding: 5px;
+            background-color: #015BA6;
+            border-radius: 10px;
+        }
+
+        nav a.active:hover {
+            color: white;
+            transition: .2s;
+            transform: scale(1.1);
+            padding: 5px;
+            background-color: aquamarine;
+            border-radius: 10px;
+        }
+
+        nav .links {
+            width: 50%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .content {
+            display: inline-block;
+            margin-top: 150px;
+            color: #015BA6;
+            z-index: 1;
+            font-size: 18px;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            overflow-wrap: break-word;
+            text-align: center;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .content p {
+            display: inline-block;
+            margin-left: 10%;
+            margin-right: 10%;
+            text-align: justify;
+            text-justify: inter-word;
+            text-align: justify;
+        }
+        .content2{
+            color: #015BA6;
+            text-align: center;
+            margin-top: 200px;
+            padding-top: 80px;
+            display: block;
+        }
+        .content2 p{
+            text-align: justify;
+        }
+        .content2 div{
+            margin: 50px;
+        }
+        .visual img{
+            width: 100%;
+            border: solid 5px #015BA6;
+            border-radius: 20px;
+        }
+        .scroll {
+            width: 60px;
+            height: 60px;
+            border: 5px solid #015BA6 ;
+            border-radius: 50%;
+            position: relative;
+            background: none;
+            display: inline-block;
+            animation: down 1.5s infinite;
+            -webkit-animation: down 1.5s infinite;
+        
+            &::before {
+                content: '';
+                position: absolute;
+                top: 15px;
+                left: 18px;
+                width: 18px;
+                height: 18px;
+                border-left: 5px solid #015BA6 ;
+                border-bottom: 5px solid #015BA6 ;
+                transform: rotate(-45deg);
+            
+            }
+        }
+        .reveal{
+            opacity: 0;
+            transition: all 2s ease;
+        }
+        .reveal.active{
+            transform: translateY(0px);
+            opacity: 1;
+        }
+        @keyframes down {
+            0% {
+                transform: translate(0);
+            }
+            20% {
+                transform: translateY(15px);
+            }
+            40% {
+                transform: translate(0);
+            }
+        }
+
+        @-webkit-keyframes down {
+            0% {
+                transform: translate(0);
+            }
+            20% {
+                transform: translateY(15px);
+            }
+            40% {
+                transform: translate(0);
+            }
+        }
+        .scroll:hover{
+            border: 5px solid white ;
+            background: none;
+            transition: 0.5s;
+            transform: scale(1.1);
+            &::before {
+                content: '';
+                transition: 0.5s;
+                border-left: 5px solid white ;
+                border-bottom: 5px solid white ;
+                transform: rotate(-45deg);
+            
+            }
+        }
+        /* Media query for screens <= 600px */
+        @media screen and (max-width: 600px) {
+            nav {
+                display: inline-block;
+                align-items: flex-start;
+            }
+
+            .menu {
+                display: inline-flex;
+                
+            }
+            .menu:hover{
+                transition: .2s;
+                transform: scale(1.5);
+            }
+            nav .logonav {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+          
+            nav .links {
+                width: 100%;
+                flex-direction: column;
+                align-items: center;
+                position: absolute;
+                top: 85px;
+                left: 0;
+                right: 0;
+                background-image: linear-gradient(5deg,#c0beb9 5%, #f0f0f0 30%);
+                display: none; 
+                flex-direction: column;
+                text-align: center;
+            }
+            nav .links a{
+                display: block;
+                width: 100%;
+                text-align: center;
+                padding: 10px;
+                font-size: 18px;
+            }
+
+            nav .links a.active{
+                background-color: #015BA6;
+                width: 100%;
+                color: white;
+                border-radius: 0px;
+                padding: 10px;
+            }
+            nav .links a.active:hover{
+                background-color: aquamarine;
+                width: 100%;
+                color: white;
+                border-radius: 0;
+                transition: .2s;
+                transform: scale(1.1);
+                padding: 10px;
+            }
+            nav .links a:hover{
+                background-color: #015BA6;
+                width: 100%;
+                color: white;
+                border-radius: 0;
+                transition: .2s;
+                transform: scale(1.1);
+                padding: 10px;
+                
+            }
+            .content{
+                font-size: 90%;
+                
+            }
+            .content p {
+                
+                display: inline-block;
+                margin-left: 20px;
+                margin-right: 20px;
+                text-align: justify;
+                text-justify: inter-word;
+            }
+            .visual img{
+                width: 95%; 
+                border: solid 5px #015BA6;
+                border-radius: 20px;
+            }
+            .content2{
+                font-size: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <video class="vid" autoplay loop muted>
+            <source src="Pokemon Video.mp4">
+        </video>
+        
+    </div>
+
+    <nav class="navbar">
+        <div class="logonav">
+            <a class="logopokemon" href="index.html"><img src="Logo.png" class="logo" alt="logo"></a>
+            <label class="menu" id="menu-btn"><img src="menu.png" alt="menu"></label>
+        </div>
+        <div class="links" id="nav-links">
+            <a class="active" href="index.html" >Home</a>
+            <a class="link" href="pokedex.html">Pokedex</a>
+            <a class="link" href="maps.html">Maps</a>
+            <a class="link" href="about.html">About</a>
+            <a class="link" href="games.html">Games</a>
+        </div>
+    </nav>
+
+    <div class="content">
+        <div class="content1">
+        <h1>Pokemon Hisuian Website</h1>
+        <div>
+            <h3>Be Immersed in the Fascinating World of Hisuian Pokémon!</h3>
+            <p>Welcome to the Hisuian Pokédex, your ultimate guide to the enchanting Pokémon inhabiting the ancient land of Hisui. Delve into the captivating realm where familiar Pokémon have evolved into extraordinaire forms, exhibiting enthralling new abilities and appearances.</p> 
+            <p>Whether you're an interested newbie or an experienced trainer, the Hisuian Pokédex will guide you to an exhilarating journey through the past. Brace yourself to stumble upon the wonder of Hisui's Pokémon and unravel the mysteries of their immemorial origins.</p>
+        </div>
+        </div>
+        <div class="scroll_btn">
+            <a href="#content2">
+                <div class="scroll">
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="content2" id="content2">
+        <h2 class="reveal" id="start">Our comprehensive website highlights:</h2>
+        <div class="reveal">
+            <p><b>Pokedex:</b> Unveil the classifications, abilities, types, entry numbers, and descriptions of each Hisuian Pokémon.</p>
+            <div class="visual">
+                <img src="pokedex_web.png">
+            </div>
+        </div>
+        <div class="reveal">
+            <p><b>Hisuian Map:</b> Delve into the distinct regions of Hisui and unwrap the locations where these Pokémon dwell.</p>
+            <div class="visual reveal">
+                <img src="hisui.jpg">
+            </div>
+        </div>
+        <div class="reveal">
+            <p><b>Pokemon Battle:</b> Engage in a turn-based combat, where each move is carefully chosen based on  strategy. The ultimate goal is to deplete the opponent's Pokémon health, forcing them to faint and securing a victory for the trainer.</p>
+            <div class="visual reveal">
+                <img src="Games.png">
+            </div>
+        </div>
+        
+    </div>
+
+    <script>
+
+        const menuButton = document.getElementById('menu-btn');
+        const navLinks = document.getElementById('nav-links');
+
+        document.getElementById('menu-btn').addEventListener('click', function() {
+            const navLinks = document.getElementById('nav-links');
+            if (window.innerWidth <= 600) {
+                if (navLinks.style.display === "none" || navLinks.style.display === "") {
+                    navLinks.style.display = "flex"; // Show links on small screen
+                } else {
+                    navLinks.style.display = "none"; // Hide links on small screen
+                }
+            }
+        });
+
+        document.addEventListener('click', function(event) {
+            if (window.innerWidth <= 600 && !navLinks.contains(event.target) && !menuButton.contains(event.target)) {
+                navLinks.style.display = "none";
+            }
+        });
+
+        // Reset menu state when window is resized above 600px
+        window.addEventListener('resize', function() {
+            const navLinks = document.getElementById('nav-links');
+            if (window.innerWidth > 600) {
+                navLinks.style.display = "flex"; // Always show the links on large screens
+            } else {
+                navLinks.style.display = "none"; // Hide the links on small screens
+            }
+        });
+        window.addEventListener('scroll', reveal);
+
+        function reveal() {
+            var reveals = document.querySelectorAll('.reveal');
+
+            for(var i = 0; 1 < reveals.length; i++){
+
+                var windowheight = window.innerHeight;
+                var revealtop = reveals[i].getBoundingClientRect().top;
+                var revealpoint = 150;
+
+                if (revealtop < windowheight - revealpoint){
+                    reveals[i].classList.add('active');
+                }
+                else
+                reveals[i].classList.remove('active');
+            }
+        }
+    </script>
+
+
+<div id="overlay" class="overlay">
+    <div class="popup" id="popup">
+        
+        <div id="loginFormContainer">
+            <h2>Log In</h2>
+            <form id="loginForm">
+                <input type="text" id="loginEmail" placeholder="Email" required>
+                <input type="password" id="loginPassword" placeholder="Password" required>
+                <button class="btn" type="submit">Log In</button>
+            </form>
+            <p>Don't have an account? <button class="btn" id="showSignUpBtn">Sign Up</button></p>
+        </div>
+        <div id="signUpFormContainer" style="display: none;">
+            <h2>Sign Up</h2>
+            <form id="signUpForm">
+                <input type="text" id="signUpUsername" placeholder="Username" required>
+                <input type="password" id="signUpPassword" placeholder="Password" required>
+                <input type="email" id="signUpEmail" placeholder="Email" required>
+                <button class="btn" type="submit">Sign Up</button>
+            </form>
+            <p>Already have an account? <button class="btn" type="button" id="backToLoginBtn">Log In</button></p>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    import { getDatabase, set, ref, update } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+
+
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCq8ohNPVFZQUkO6blzrWdQ_Isr_hPB7TY",
+      authDomain: "test4pokedex.firebaseapp.com",
+      databaseURL: "https://test4pokedex-default-rtdb.firebaseio.com",
+      projectId: "test4pokedex",
+      storageBucket: "test4pokedex.firebasestorage.app",
+      messagingSenderId: "189773508206",
+      appId: "1:189773508206:web:5e782bb6bc2fabf909407f"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase (app);
+    const auth = getAuth();
+
+  
+  
+
+document.getElementById('loginForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    var email = document.getElementById('loginEmail').value;
+    var password = document.getElementById('loginPassword').value;
+    if (!validateEmail(email)) {
+        alert('Please enter a valid email address.');
+        return;
+    }
+    signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            const user = userCredential.user;
+            const dt = new Date();
+            const tm = new Time();
+            update(ref(database, 'users/' + user.uid), {
+                last_login: dt,
+                last_login: tm
+            }).then(() => {
+                alert('User logged in!', 'true');
+                document.getElementById('overlay').style.display = 'none';
+            });
+        })
+        .catch((error) => {
+            alert(error.message);
+        });
+});
+
+document.getElementById('signUpForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    var email = document.getElementById('signUpEmail').value;
+    var username = document.getElementById('signUpUsername').value;
+    var password = document.getElementById('signUpPassword').value;
+    if (!validateEmail(email)) {
+        alert('Please enter a valid email address.');
+        return;
+    }
+    createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            const user = userCredential.user;
+            set(ref(database, 'users/' + user.uid), {
+                username: username,
+                email: email
+            }).then(() => {
+                alert('User Created!');
+                document.getElementById('signUpFormContainer').style.display = 'none';
+                document.getElementById('loginFormContainer').style.display = 'block';
+            });
+        })
+        .catch((error) => {
+            alert(error.message);
+        });
+});
+document.addEventListener('DOMContentLoaded', (event) => {
+setTimeout(() => {
+    document.getElementById('overlay').style.display = 'flex';
+}, 5000);
+
+document.getElementById('showSignUpBtn').addEventListener('click', () => {
+    document.getElementById('loginFormContainer').style.display = 'none';
+    document.getElementById('signUpFormContainer').style.display = 'block';
+});
+
+document.getElementById('backToLoginBtn').addEventListener('click', () => {
+    document.getElementById('signUpFormContainer').style.display = 'none';
+    document.getElementById('loginFormContainer').style.display = 'block';
+        });
+
+
+document.getElementById('closeBtn').addEventListener('click', () => {
+    document.getElementById('overlay').style.display = 'none';
+});
+});
+
+function validateEmail(email) {
+const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+return re.test(email);
+}
+
+
+  </script>
+
+
+    
+
+</body>
+</html>
