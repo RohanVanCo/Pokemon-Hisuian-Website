@@ -467,8 +467,9 @@
     </script>
 
 
-<<div id="overlay" class="overlay">
+<div id="overlay" class="overlay">
     <div class="popup" id="popup">
+        
         <div id="loginFormContainer">
             <h2>Log In</h2>
             <form id="loginForm">
@@ -497,97 +498,107 @@
     import { getDatabase, set, ref, update } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 
+
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
     // Your web app's Firebase configuration
     const firebaseConfig = {
-        apiKey: "AIzaSyCq8ohNPVFZQUkO6blzrWdQ_Isr_hPB7TY",
-        authDomain: "test4pokedex.firebaseapp.com",
-        databaseURL: "https://test4pokedex-default-rtdb.firebaseio.com",
-        projectId: "test4pokedex",
-        storageBucket: "test4pokedex.firebasestorage.app",
-        messagingSenderId: "189773508206",
-        appId: "1:189773508206:web:5e782bb6bc2fabf909407f"
+      apiKey: "AIzaSyCq8ohNPVFZQUkO6blzrWdQ_Isr_hPB7TY",
+      authDomain: "test4pokedex.firebaseapp.com",
+      databaseURL: "https://test4pokedex-default-rtdb.firebaseio.com",
+      projectId: "test4pokedex",
+      storageBucket: "test4pokedex.firebasestorage.app",
+      messagingSenderId: "189773508206",
+      appId: "1:189773508206:web:5e782bb6bc2fabf909407f"
     };
-
+  
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
-    const database = getDatabase(app);
+    const database = getDatabase (app);
     const auth = getAuth();
 
-    document.getElementById('loginForm').addEventListener('submit', (e) => {
-        e.preventDefault();
-        var email = document.getElementById('loginEmail').value;
-        var password = document.getElementById('loginPassword').value;
-        if (!validateEmail(email)) {
-            alert('Please enter a valid email address.');
-            return;
-        }
-        signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                const user = userCredential.user;
-                const dt = new Date();
-                update(ref(database, 'users/' + user.uid), {
-                    last_login: dt.toString()
-                }).then(() => {
-                    alert('User logged in!', 'true');
-                    document.getElementById('overlay').style.display = 'none';
-                });
-            })
-            .catch((error) => {
-                alert(error.message);
-            });
-    });
+  
+  
 
-    document.getElementById('signUpForm').addEventListener('submit', (e) => {
-        e.preventDefault();
-        var email = document.getElementById('signUpEmail').value;
-        var username = document.getElementById('signUpUsername').value;
-        var password = document.getElementById('signUpPassword').value;
-        if (!validateEmail(email)) {
-            alert('Please enter a valid email address.');
-            return;
-        }
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                const user = userCredential.user;
-                set(ref(database, 'users/' + user.uid), {
-                    username: username,
-                    email: email
-                }).then(() => {
-                    alert('User Created!');
-                    document.getElementById('signUpFormContainer').style.display = 'none';
-                    document.getElementById('loginFormContainer').style.display = 'block';
-                });
-            })
-            .catch((error) => {
-                alert(error.message);
-            });
-    });
-
-    document.addEventListener('DOMContentLoaded', (event) => {
-        setTimeout(() => {
-            document.getElementById('overlay').style.display = 'flex';
-        }, 5000);
-
-        document.getElementById('showSignUpBtn').addEventListener('click', () => {
-            document.getElementById('loginFormContainer').style.display = 'none';
-            document.getElementById('signUpFormContainer').style.display = 'block';
-        });
-
-        document.getElementById('backToLoginBtn').addEventListener('click', () => {
-            document.getElementById('signUpFormContainer').style.display = 'none';
-            document.getElementById('loginFormContainer').style.display = 'block';
-        });
-
-        document.getElementById('closeBtn').addEventListener('click', () => {
-            document.getElementById('overlay').style.display = 'none';
-        });
-    });
-
-    function validateEmail(email) {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
+document.getElementById('loginForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    var email = document.getElementById('loginEmail').value;
+    var password = document.getElementById('loginPassword').value;
+    if (!validateEmail(email)) {
+        alert('Please enter a valid email address.');
+        return;
     }
-</script>
+    signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            const user = userCredential.user;
+            const dt = new Date();
+            
+            update(ref(database, 'users/' + user.uid), {
+                last_login: dt
+            }).then(() => {
+                alert('User logged in!', 'true');
+                document.getElementById('overlay').style.display = 'none';
+            });
+        })
+        .catch((error) => {
+            alert(error.message);
+        });
+});
+
+document.getElementById('signUpForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    var email = document.getElementById('signUpEmail').value;
+    var username = document.getElementById('signUpUsername').value;
+    var password = document.getElementById('signUpPassword').value;
+    if (!validateEmail(email)) {
+        alert('Please enter a valid email address.');
+        return;
+    }
+    createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            const user = userCredential.user;
+            set(ref(database, 'users/' + user.uid), {
+                username: username,
+                email: email
+            }).then(() => {
+                alert('User Created!');
+                document.getElementById('signUpFormContainer').style.display = 'none';
+                document.getElementById('loginFormContainer').style.display = 'block';
+            });
+        })
+        .catch((error) => {
+            alert(error.message);
+        });
+});
+document.addEventListener('DOMContentLoaded', (event) => {
+setTimeout(() => {
+    document.getElementById('overlay').style.display = 'flex';
+}, 5000);
+
+document.getElementById('showSignUpBtn').addEventListener('click', () => {
+    document.getElementById('loginFormContainer').style.display = 'none';
+    document.getElementById('signUpFormContainer').style.display = 'block';
+});
+
+document.getElementById('backToLoginBtn').addEventListener('click', () => {
+    document.getElementById('signUpFormContainer').style.display = 'none';
+    document.getElementById('loginFormContainer').style.display = 'block';
+        });
+
+
+document.getElementById('closeBtn').addEventListener('click', () => {
+    document.getElementById('overlay').style.display = 'none';
+});
+});
+
+function validateEmail(email) {
+const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+return re.test(email);
+}
+
+
+  </script>
 
 
     
