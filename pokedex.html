@@ -5271,25 +5271,6 @@
                     navLinks.style.display = "none"; // Hide the links on small screens
                 }
             });
-            function filterPokemon() {
-                // Get the search input value
-                const searchInput = document.getElementById("searchBox").value.toLowerCase();
-                // Get all Pokémon divs
-                const pokemonDivs = document.querySelectorAll(".pokemon");
-    
-                // Loop through the Pokémon divs
-                pokemonDivs.forEach(pokemon => {
-                    // Get the Pokémon name text
-                    const pokemonName = pokemon.querySelector("p:last-of-type").textContent.toLowerCase();
-    
-                    // Compare the search input to the Pokémon name
-                    if (pokemonName.includes(searchInput)) {
-                        pokemon.style.display = "flex"; // Show matching Pokémon
-                    } else {
-                        pokemon.style.display = "none"; // Hide non-matching Pokémon
-                    }
-                });
-            }
                 const pokemonForms = {
                     "pokedex003": [
                         { img: "Decidueye-Alola.png", text1: "Decidueye (Alolan Form)", text2:"Type: Grass/Ghost", text3: "Pokedex Entry: It cunningly conceals arrow quills in its wings. It launches these quills with such precision that they can pierce a pebble at over a hundred yards."},
@@ -5455,7 +5436,25 @@
                         audio.play();
                     });
                     });
-        
+                    function filterPokemon() {
+                    // Get the search input value
+                    const searchInput = document.getElementById("searchBox").value.toLowerCase();
+                    // Get all Pokémon divs
+                    const pokemonDivs = document.querySelectorAll(".pokemon");
+
+                    // Loop through the Pokémon divs
+                    pokemonDivs.forEach(pokemon => {
+                        // Get the Pokémon name text
+                        const pokemonName = pokemon.querySelector("p:last-of-type").textContent.toLowerCase();
+
+                        // Compare the search input to the Pokémon name
+                        if (pokemonName.includes(searchInput)) {
+                            pokemon.style.display = "flex"; // Show matching Pokémon
+                        } else {
+                            pokemon.style.display = "none"; // Hide non-matching Pokémon
+                        }
+                    });
+                }
             const currentFormIndex = {};
     
             function showPokedex(pokedexId) {
